@@ -3,8 +3,7 @@ import urlMetadata from "url-metadata";
 
 export async function publishLink(req, res) {
     try {
-        const { link, article } = req.body;
-        const userId = 5;
+        const { link, article, userId } = req.body;
 
         const post = await db.query(`
         INSERT INTO posts
@@ -45,6 +44,7 @@ export async function getPosts(req, res) {
                         image: metadata.image,
                         article: post.article,
                         createdAt: post.createdAt,
+                        userId: post.userId,
                     };
                 } catch (error) {
                     console.error(`Error fetching metadata for post with ID ${post.id}:`, error);
@@ -57,6 +57,7 @@ export async function getPosts(req, res) {
                         image: null,
                         article: post.article,
                         createdAt: post.createdAt,
+                        userId: post.userId,
                     };
                 }
             })
