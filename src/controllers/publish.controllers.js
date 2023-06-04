@@ -1,11 +1,8 @@
-import chalk from "chalk";
 import { db } from "../database/database.connection.js";
 import urlMetadata from "url-metadata";
 
 export async function publishLink(req, res) {
     try {
-        console.log(chalk.green(`chamou`));
-
         const { link, article } = req.body;
         const userId = 5;
 
