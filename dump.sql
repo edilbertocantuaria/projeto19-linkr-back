@@ -59,6 +59,7 @@ CREATE TABLE public.likes (
     id integer NOT NULL,
     "userId" integer NOT NULL,
     "postId" integer NOT NULL,
+    "countLikes" integer DEFAULT 0,
     "createdAt" timestamp with time zone DEFAULT now() NOT NULL
 );
 
@@ -278,6 +279,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.posts VALUES (1, 'www.youtube.com', 'videos maneiros', 1, '2023-06-04 12:14:20.133953-03');
 
 
 --
@@ -290,6 +292,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.users VALUES (1, 'edilberto', 'edilberto@linker.com', 'https://www.patasdacasa.com.br/sites/patasdacasa/files/styles/webp/public/noticias/2023/01/gato-preto-e-realmente-mais-carinhoso-que-os-outros-veja-a-percepcao-de-alguns-tutores_1.jpg.webp?itok=yOGgcJK-', '123456', '2023-06-04 12:02:48.418428-03');
 
 
 --
@@ -317,7 +320,7 @@ SELECT pg_catalog.setval('public."postHashtags_id_seq"', 1, false);
 -- Name: posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.posts_id_seq', 1, false);
+SELECT pg_catalog.setval('public.posts_id_seq', 1, true);
 
 
 --
@@ -331,7 +334,7 @@ SELECT pg_catalog.setval('public.sessions_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
@@ -404,22 +407,6 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
-
-
---
--- Name: likes likes_fk0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.likes
-    ADD CONSTRAINT likes_fk0 FOREIGN KEY ("userId") REFERENCES public.users(id);
-
-
---
--- Name: likes likes_fk1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.likes
-    ADD CONSTRAINT likes_fk1 FOREIGN KEY ("postId") REFERENCES public.posts(id);
 
 
 --
