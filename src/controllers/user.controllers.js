@@ -8,14 +8,14 @@ export async function getUsers(req, res) {
         `)
         res.status(200).send(users.rows)
     } catch (err) {
-        res.status(500).send("Houve um erro ao pegar os usuários")
+        res.status(500).send("There was an error getting users")
     }
 }
 
 export async function getUser(req, res) {
-    try {
-        const { userId } = req.params;
+    const { userId } = req.params;
 
+    try {
         const result = await db.query(
             `
         SELECT *
@@ -33,6 +33,6 @@ export async function getUser(req, res) {
 
         res.status(200).send(user);
     } catch (err) {
-        res.status(500).send("Houve um erro ao pegar o usuário");
+        res.status(500).send("There was an error getting the user");
     }
 }
