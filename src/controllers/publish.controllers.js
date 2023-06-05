@@ -72,3 +72,39 @@ export async function getPosts(req, res) {
     }
 }
 
+
+export async function editPost(req, res) {
+    const id = Number(req.params.id);
+    if (isNaN(id)) return res.sendStatus(400);
+
+    try {
+        const post = await db.query("SELECT * FROM posts WHERE id=$1 ", [id]);
+        if (post.rows.length === 0) return res.status(404).send("Post não encontrado");
+
+        await db.query(`UPDATE posts 
+        SET link=$1, article=$2 
+        WHERE id=$3 `, [link, article, id]);
+
+        res.status(200).send("Edição realizada com sucesso")
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+
+}
+
+export async function deletePost(req, res) {
+    const id = Number(req.params.id);
+    if (isNaN(id)) return res.sendStatus(400);
+
+    try {
+        const post = await db.query("SELECT * FROM posts WHERE id=$1 ", [id]);
+        if (post.rows.length === 0) return res.status(404).send("Post não encontrado");
+
+        await db.query(`DELETE FROM posts WHERE id=$1 `, [id]);
+
+        res.sendStatus(200);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+
+}
