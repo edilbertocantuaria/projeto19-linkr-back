@@ -16,22 +16,28 @@ export async function getUser(req, res) {
     const { userId } = req.params;
 
     try {
-        const result = await db.query(
+
+        const user = await db.query(`
+            SELECT * 
+            FROM users
+            WHERE id = $1
+        `, [userId])
+
+
+        const followers = await db.query(
             `
-        SELECT *
-        FROM users
-        WHERE id = $1
+            SELECT users.*, followers."followerId", followers."followedId" 
+            FROM users JOIN followers ON users.id = followers."followedId"
+            WHERE users.id = $1;
       `,
             [userId]
         );
-
-        const user = result.rows[0];
 
         if (!user) {
             return res.status(404).send({ message: 'User not found' });
         }
 
-        res.status(200).send(user);
+        res.status(200).send({user: user.rows[0], followers: followers});
     } catch (err) {
         res.status(500).send("There was an error getting the user");
     }
