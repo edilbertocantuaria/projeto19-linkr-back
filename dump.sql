@@ -21,6 +21,39 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: comments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.comments (
+    id integer NOT NULL,
+    comments text NOT NULL,
+    "userId" integer NOT NULL,
+    "postId" integer NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.comments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
+
+
+--
 -- Name: hashtags; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -216,6 +249,13 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
+
+
+--
 -- Name: hashtags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -258,6 +298,12 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: hashtags; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -293,6 +339,13 @@ INSERT INTO public.posts VALUES (1, 'www.youtube.com', 'videos maneiros', 1, '20
 --
 
 INSERT INTO public.users VALUES (1, 'edilberto', 'edilberto@linker.com', 'https://www.patasdacasa.com.br/sites/patasdacasa/files/styles/webp/public/noticias/2023/01/gato-preto-e-realmente-mais-carinhoso-que-os-outros-veja-a-percepcao-de-alguns-tutores_1.jpg.webp?itok=yOGgcJK-', '123456', '2023-06-04 12:02:48.418428-03');
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.comments_id_seq', 1, false);
 
 
 --
@@ -335,6 +388,14 @@ SELECT pg_catalog.setval('public.sessions_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+
+
+--
+-- Name: comments comments_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_pk PRIMARY KEY (id);
 
 
 --
@@ -407,6 +468,22 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: comments comments_fk0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_fk0 FOREIGN KEY ("userId") REFERENCES public.users(id);
+
+
+--
+-- Name: comments comments_fk1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_fk1 FOREIGN KEY ("postId") REFERENCES public.posts(id);
 
 
 --
