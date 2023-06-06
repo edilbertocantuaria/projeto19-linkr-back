@@ -54,6 +54,37 @@ ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 
 --
+-- Name: followers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.followers (
+    id integer NOT NULL,
+    "followerId" text NOT NULL,
+    "followedId" text NOT NULL
+);
+
+
+--
+-- Name: followers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.followers_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: followers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.followers_id_seq OWNED BY public.followers.id;
+
+
+--
 -- Name: hashtags; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -256,6 +287,13 @@ ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.com
 
 
 --
+-- Name: followers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.followers ALTER COLUMN id SET DEFAULT nextval('public.followers_id_seq'::regclass);
+
+
+--
 -- Name: hashtags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -299,6 +337,12 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 --
 -- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: followers; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
@@ -349,6 +393,13 @@ SELECT pg_catalog.setval('public.comments_id_seq', 1, false);
 
 
 --
+-- Name: followers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.followers_id_seq', 1, false);
+
+
+--
 -- Name: hashtags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -396,6 +447,14 @@ SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 ALTER TABLE ONLY public.comments
     ADD CONSTRAINT comments_pk PRIMARY KEY (id);
+
+
+--
+-- Name: followers followers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.followers
+    ADD CONSTRAINT followers_pkey PRIMARY KEY (id);
 
 
 --
