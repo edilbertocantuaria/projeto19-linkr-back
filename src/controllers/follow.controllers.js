@@ -4,8 +4,6 @@ export async function userFollow(req, res) {
     const { followedId } = req.params;
 
     const { followerId } = req.body;
-    console.log(followedId)
-    console.log(followerId)
 
     try {
         await db.query(`
@@ -33,10 +31,6 @@ export async function userUnfollow(req, res) {
         WHERE "followerId" = $1 AND "followedId" = $2
         `, [followerId, followedId])
 
-        // if (follow.rowCount === 0) {
-        //     return res.sendStatus(409)
-        // }
-
         res.sendStatus(202)
     } catch (error) {
         console.log(error);
@@ -44,27 +38,28 @@ export async function userUnfollow(req, res) {
     }
 }
 
-export async function getFollowsUser(req, res) {
-    const { followerId  } = req.params
-
+export async function getFollowersAndUsers(req, res) {
+    const { followerId } = req.params;
 
     try {
-        const follows = await db.query(
-            `
-        SELECT "followerId", "followedId" 
-        FROM followers 
-        WHERE "followerId"= $1;
-    `, [followerId ])
 
-    res.status(200).send(follows.rows)
+        const users = await db.query(`
+            SELECT * 
+            FROM users
+        `)
 
-    } catch (error) {
-        res.status(500).send(error);
 
+        const followers = await db.query(`
+            SELECT users.*, followers."followerId", followers."followedId" 
+            FROM users JOIN followers ON users.id = followers."followerId"
+            WHERE users.id = $1
+        `,[followerId]);
+
+        res.status(200).send({users: users.rows, followers: followers.rows});
+    } catch (err) {
+        res.status(500).send("There was an error getting the user");
     }
-
 }
-
 
 export async function getFollowedPosts(req, res) {
     const { followerId } = req.params;
@@ -77,7 +72,8 @@ export async function getFollowedPosts(req, res) {
         SELECT p.id, p.link, p.article, p."userId"
         FROM posts p
         INNER JOIN followers f ON p."userId" = f."followedId"
-        WHERE f."followerId" = $1;
+        WHERE f."followerId" = $1
+        ORDER BY "createdAt" DESC;
       `,
         [followerId]
       );
@@ -87,4 +83,3 @@ export async function getFollowedPosts(req, res) {
       res.status(500).send(error);
     }
   }
-  
