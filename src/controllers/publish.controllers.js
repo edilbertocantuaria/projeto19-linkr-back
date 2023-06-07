@@ -19,7 +19,7 @@ export async function publishLink(req, res) {
 }
 
 export async function getPosts(req, res) {
-    const { page = 1, pageSize = 10 } = req.query;
+    const { page = 1, pageSize = 5 } = req.query;
     const offset = (page - 1) * pageSize;
 
     try {
@@ -79,7 +79,8 @@ export async function getPosts(req, res) {
 
 export async function getUserPosts(req, res) {
     const { id } = req.params;
-    const { offset = 0 } = req.query;
+    const { page = 1, pageSize = 5 } = req.query;
+    const offset = (page - 1) * pageSize;
 
     try {
         const result = await db.query(`
@@ -88,13 +89,13 @@ export async function getUserPosts(req, res) {
           WHERE "userId" = $1
           ORDER BY "createdAt" DESC
           OFFSET $2
-          LIMIT 10;
-        `, [id, offset]);
+          LIMIT $3;
+        `, [id, offset, pageSize]);
 
         const posts = result.rows;
 
         if (posts.length === 0) {
-            return res.status(200).send({ message: 'There are no posts yet' });
+            return res.status(200).send([]);
         }
 
         const processedPosts = await Promise.all(
