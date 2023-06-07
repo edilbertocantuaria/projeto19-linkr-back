@@ -72,7 +72,8 @@ export async function getFollowedPosts(req, res) {
         SELECT p.id, p.link, p.article, p."userId"
         FROM posts p
         INNER JOIN followers f ON p."userId" = f."followedId"
-        WHERE f."followerId" = $1;
+        WHERE f."followerId" = $1
+        ORDER BY "createdAt" DESC;
       `,
         [followerId]
       );
