@@ -27,7 +27,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.comments (
     id integer NOT NULL,
     comments text NOT NULL,
-    "userId" integer NOT NULL,
+    img text NOT NULL,
+    username text NOT NULL,
     "postId" integer NOT NULL,
     "createdAt" timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -59,8 +60,8 @@ ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 CREATE TABLE public.followers (
     id integer NOT NULL,
-    "followerId" text NOT NULL,
-    "followedId" text NOT NULL
+    "followerId" integer NOT NULL,
+    "followedID" integer NOT NULL
 );
 
 
@@ -534,15 +535,7 @@ ALTER TABLE ONLY public.users
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_fk0 FOREIGN KEY ("userId") REFERENCES public.users(id);
-
-
---
--- Name: comments comments_fk1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_fk1 FOREIGN KEY ("postId") REFERENCES public.posts(id);
+    ADD CONSTRAINT comments_fk0 FOREIGN KEY ("postId") REFERENCES public.posts(id);
 
 
 --
