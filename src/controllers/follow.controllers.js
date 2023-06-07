@@ -4,8 +4,6 @@ export async function userFollow(req, res) {
     const { followedId } = req.params;
 
     const { followerId } = req.body;
-    console.log(followedId)
-    console.log(followerId)
     
     try {
         await db.query(`
@@ -41,5 +39,28 @@ export async function userUnfollow(req, res) {
     } catch (error) {
         console.log(error);
         return res.status(500).send({message: "It wasn't possible to execute the operation"});
+    }
+}
+
+export async function getFollowersAndUsers(req, res) {
+    const { userId } = req.params;
+
+    try {
+
+        const users = await db.query(`
+            SELECT * 
+            FROM users
+        `)
+
+
+        const followers = await db.query(`
+            SELECT users.*, followers."followerId", followers."followedId" 
+            FROM users JOIN followers ON users.id = followers."followerId"
+            WHERE users.id = $1
+        `,[userId]);
+
+        res.status(200).send({users: users.rows, followers: followers.rows});
+    } catch (err) {
+        res.status(500).send("There was an error getting the user");
     }
 }
