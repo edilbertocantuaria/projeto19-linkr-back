@@ -59,8 +59,8 @@ ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 CREATE TABLE public.followers (
     id integer NOT NULL,
-    "followerId" text NOT NULL,
-    "followedId" text NOT NULL
+    "followerId" integer NOT NULL,
+    "followedId" integer NOT NULL
 );
 
 
