@@ -19,7 +19,7 @@ export async function publishLink(req, res) {
 }
 
 export async function getPosts(req, res) {
-    const { page = 1, pageSize = 5 } = req.query;
+    const { page = 1, pageSize = 10 } = req.query;
     const offset = (page - 1) * pageSize;
 
     try {
@@ -79,7 +79,7 @@ export async function getPosts(req, res) {
 
 export async function getUserPosts(req, res) {
     const { id } = req.params;
-    const { page = 1, pageSize = 5 } = req.query;
+    const { page = 1, pageSize = 10 } = req.query;
     const offset = (page - 1) * pageSize;
 
     try {
