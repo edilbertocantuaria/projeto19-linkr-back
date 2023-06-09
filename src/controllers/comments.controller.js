@@ -2,9 +2,9 @@ import { db } from "../database/database.connection.js"
 
 export async function postComment(req,res){
     const {postId}=req.params
-    const {comment,img,username}=req.body
+    const {comment,img,username,userId}=req.body
     try {
-        const result=await db.query(`insert into comments ("postId",comments,img,username) values($1,$2,$3,$4);`,[postId,comment,img,username])
+        const result=await db.query(`insert into comments ("postId",comments,img,username,"userId") values($1,$2,$3,$4,$5);`,[postId,comment,img,username,userId])
         res.sendStatus(200)
     } catch (err) {
         res.status(500).send("Houve um erro ao enviar o comentario para o banco")
