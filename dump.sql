@@ -27,8 +27,10 @@ SET default_table_access_method = heap;
 CREATE TABLE public.comments (
     id integer NOT NULL,
     comments text NOT NULL,
-    "userId" integer NOT NULL,
+    img text NOT NULL,
+    username text NOT NULL,
     "postId" integer NOT NULL,
+    "userId" integer NOT NULL,
     "createdAt" timestamp with time zone DEFAULT now() NOT NULL
 );
 
@@ -37,7 +39,7 @@ CREATE TABLE public.comments (
 -- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.comments_id_seq
+CREATE SEQUENCE public.followers_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -534,7 +536,7 @@ ALTER TABLE ONLY public.users
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_fk0 FOREIGN KEY ("userId") REFERENCES public.users(id);
+    ADD CONSTRAINT comments_fk0 FOREIGN KEY ("postId") REFERENCES public.posts(id);
 
 
 --
@@ -542,7 +544,7 @@ ALTER TABLE ONLY public.comments
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_fk1 FOREIGN KEY ("postId") REFERENCES public.posts(id);
+    ADD CONSTRAINT comments_fk1 FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
