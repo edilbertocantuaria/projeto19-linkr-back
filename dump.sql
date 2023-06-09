@@ -39,7 +39,7 @@ CREATE TABLE public.comments (
 -- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.followers_id_seq
+CREATE SEQUENCE public.comments_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
